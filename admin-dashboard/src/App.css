@@ -1,0 +1,37 @@
+.sidebar {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 70px);
+  border-right: 1px solid #e9ecef;
+  padding-top: 20px;
+}
+
+.sidebar .nav-link {
+  color: #343a40;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  margin: 2px 10px;
+  transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover {
+  background-color: #e9ecef;
+}
+
+.sidebar .nav-link.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.main-content {
+  padding: 20px;
+}
+
+/* For the cards in product approval */
+.card {
+  transition: transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}

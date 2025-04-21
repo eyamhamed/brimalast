@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Brima Souk",
+    "slug": "brima-souk",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/images/logo-full.png",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/images/logo-full.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.testmhamed.brimasouk"
+    },
+    "web": {
+      "favicon": "./src/assets/images/logo-full.png"
+    },
+    "newArchEnabled": true
+  }
+}

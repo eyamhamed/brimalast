@@ -1,0 +1,307 @@
+# Brima Souk Project Documentation
+
+## Overview
+
+Brima Souk is a comprehensive marketplace platform designed to promote Tunisian artisans and stimulate collaborative innovation. The platform includes a traditional marketplace, artisanal experiences, and a crowdsourcing component to facilitate co-creation between artisans and collaborators.
+
+## Architecture
+
+The application is built using the MERN stack:
+- **Frontend**: React.js (web) and React Native (mobile)
+- **Backend**: Node.js with Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT with bcrypt for password hashing
+
+## Project Structure
+
+```
+brimasouk/backend/
+├── src/
+│   ├── controllers/    # Business logic handlers
+│   ├── middleware/     # Request processing middleware
+│   ├── models/         # MongoDB schemas
+│   ├── routes/         # API route definitions
+│   ├── utils/          # Utility functions and services
+│   └── server.js       # Main application entry point
+├── .env                # Environment variables
+└── package.json        # Project dependencies
+```
+
+## Core Components
+
+### 1. User Management
+
+The platform supports multiple user roles with different permissions:
+
+- **Regular User**: Can browse products, make purchases, and book artisanal experiences
+- **Artisan**: Can create and manage their products and host artisanal experiences
+- **Collaborator**: Can contribute expertise in different areas:
+  - Designer: Improves visual appeal of products
+  - Technical Expert: Provides technical expertise
+  - Marketer: Develops promotion strategies and creates promo codes
+- **Admin**: Has complete system access with approval capabilities
+
+### 2. Product Management
+
+Products are organized into six main categories: Men, Women, Gifts, Home, Kids, and Beauty. Each product includes:
+
+- Basic details (name, description, price)
+- Category classification
+- Stock management
+- Approval workflow
+- Promotional features (discounts, flash sales)
+- Technical specifications (materials, dimensions)
+
+### 3. Artisanal Experiences
+
+A unique feature allowing users to participate in immersive experiences with artisans:
+
+- Workshop events
+- Demonstrations
+- Studio visits
+- Artisanal fairs
+- Collaborative creation sessions
+
+Each experience includes booking management, attendance tracking, and promotional code generation for participants.
+
+### 4. E-Commerce Functionality
+
+Comprehensive e-commerce features including:
+
+- Shopping cart management
+- Order processing
+- Payment integration with e-pay Attijari
+- Promotional code application
+- Order fulfillment tracking
+
+## API Endpoints
+
+### Authentication
+
+```
+POST /api/auth/signup         # Register new user
+POST /api/auth/signin         # Login user
+POST /api/auth/forgot-password # Request password reset
+POST /api/auth/reset-password # Reset password with token
+```
+
+### User Management
+
+```
+GET  /api/users/profile       # Get current user profile
+PUT  /api/users/profile       # Update profile
+POST /api/users/apply-artisan # Apply as artisan
+GET  /api/users/artisans      # List artisans
+GET  /api/users/artisans/:id  # Get artisan details
+```
+
+### Product Management
+
+```
+GET    /api/products                  # List products with filtering
+POST   /api/products                  # Create product (artisan only)
+GET    /api/products/:id              # Get product details
+PUT    /api/products/:id              # Update product
+DELETE /api/products/:id              # Delete product
+PUT    /api/products/:id/promotion    # Set promotion
+GET    /api/products/category/:category # Filter by category
+```
+
+### Event Management
+
+```
+GET    /api/events                   # List events with filtering
+POST   /api/events                   # Create event (artisan only)
+GET    /api/events/:id               # Get event details
+PUT    /api/events/:id               # Update event
+POST   /api/events/:id/book          # Book event
+GET    /api/events/reservations      # List user reservations
+PUT    /api/events/reservations/:id/cancel # Cancel reservation
+GET    /api/events/upcoming          # List upcoming events
+GET    /api/events/regions/:region   # Filter by region
+```
+
+### Order Management
+
+```
+POST   /api/orders                  # Create order
+GET    /api/orders                  # List user orders
+GET    /api/orders/:id              # Get order details
+PUT    /api/orders/:id/cancel       # Cancel order
+GET    /api/orders/:id/payment      # Verify payment
+PUT    /api/orders/:id/status       # Update status
+GET    /api/orders/artisan          # List artisan orders
+```
+
+### Admin Operations
+
+```
+GET    /api/admin/dashboard          # Get statistics
+GET    /api/admin/users              # List all users
+GET    /api/admin/artisans/pending   # List pending artisans
+PUT    /api/admin/artisans/:id/approve # Approve artisan
+GET    /api/admin/products/pending   # List pending products
+PUT    /api/admin/products/:id/approve # Approve product
+GET    /api/admin/events/pending     # List pending events
+PUT    /api/admin/events/:id/approve # Approve event
+```
+
+## Data Models
+
+### User Model
+
+```javascript
+/**
+ * User model for authentication and user management
+ * 
+ * Includes:
+ * - Authentication information (email, password)
+ * - Profile details (name, picture, region)
+ * - Role-based access control (user, artisan, collaborator, admin)
+ * - Artisan-specific information (application, approval)
+ * - Collaborator-specific information (skills, portfolio)
+ */
+```
+
+### Product Model
+
+```javascript
+/**
+ * Product model for the marketplace
+ * 
+ * Includes:
+ * - Basic details (name, description, price)
+ * - Categorization (Men, Women, Gifts, Home, Kids, Beauty)
+ * - Stock management
+ * - Approval workflow
+ * - Promotional features (discounts, flash sales)
+ * - Technical specifications (materials, dimensions)
+ */
+```
+
+### Event Model
+
+```javascript
+/**
+ * Event model for artisanal experiences
+ * 
+ * Includes:
+ * - Event details (title, description, date/time)
+ * - Location information
+ * - Capacity management (max participants, current participants)
+ * - Pricing and materials
+ * - Approval workflow
+ * - Event categorization (workshop, demonstration, visit, fair)
+ */
+```
+
+### Order Model
+
+```javascript
+/**
+ * Order model for e-commerce functionality
+ * 
+ * Includes:
+ * - Order items with products and quantities
+ * - Shipping information
+ * - Payment details and status
+ * - Order fulfillment status
+ * - Price calculations (subtotal, shipping, discounts)
+ * - Gift options
+ */
+```
+
+## Frontend Integration Guidelines
+
+### Authentication Flow
+
+1. Use JWT for authentication
+2. Store token in localStorage or secure cookie
+3. Include token in Authorization header for API requests
+4. Implement role-based UI access controls
+
+```javascript
+// Example of an authenticated API request
+const fetchUserProfile = async () => {
+  try {
+    const response = await fetch('/api/users/profile', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+  }
+};
+```
+
+### Product Display
+
+Products should be displayed with the following information:
+- Product name
+- Description
+- Price (with original price if discounted)
+- Seller/artisan name
+- Rating (out of 5 stars)
+- Category
+- Promotional status (if applicable)
+
+### Event Booking Process
+
+1. User browses available events
+2. User selects event and provides booking information
+3. System confirms reservation and generates unique promo code
+4. Email notification is sent to the participant
+
+### Role-Based UI Components
+
+Implement conditional rendering based on user roles:
+
+```javascript
+// Example of role-based rendering
+const Dashboard = ({ user }) => {
+  return (
+    <div>
+      {user.role === 'admin' && <AdminControls />}
+      {user.role === 'artisan' && <ArtisanDashboard />}
+      {user.role === 'collaborator' && <CollaboratorTools />}
+      <UserOrders />
+    </div>
+  );
+};
+```
+
+## Environment Setup
+
+Required environment variables:
+
+```
+MONGODB_URI=mongodb://localhost:27017/brimasouk
+JWT_SECRET=your_jwt_secret
+EMAIL_SERVICE=your_email_service
+EMAIL_USER=your_email_username
+EMAIL_PASS=your_email_password
+EPAY_MERCHANT_ID=your_merchant_id
+EPAY_SECRET_KEY=your_secret_key
+```
+
+## Getting Started for Frontend Developers
+
+1. Clone the repository
+2. Set up environment variables
+3. Run `npm install` to install dependencies
+4. Start the development server with `npm run dev`
+5. Connect your frontend application to the API endpoints
+
+## Security Considerations
+
+- All API endpoints requiring authentication are protected by authMiddleware
+- Role-based access control is enforced for sensitive operations
+- Password hashing is implemented with bcrypt
+- API input validation is performed by middleware
+- Payment security utilizes HMAC signature verification
+
+## Support
+
+For technical questions or assistance, please contact the backend development team.
